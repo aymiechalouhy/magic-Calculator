@@ -18,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Container(
               height: size.height /15,
-              color: Colors.black,
+              color: Colors.amber,
             ),
             Container(
               height: size.height/1.8,
