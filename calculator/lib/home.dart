@@ -8,20 +8,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String tt = "";
+  String calText = "";
+  String dob = "";
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(251, 253, 250, 250),
-        body: Column( mainAxisAlignment: MainAxisAlignment.end, 
-        children: [
+        body: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
+            child: Column(
               children: [
                 SizedBox(
-                  child: Text(tt,
+                  child: Text(calText,
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 30,
@@ -29,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )),
                 ),
                 const SizedBox(
-                  height: 180,
+                  height: 30,
                 ),
               ],
             ),
@@ -83,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   blocks("%"),
                   blocks("0"),
                   blocks("."),
-                  blocks("=", Colors.blue)
+                  blocks("=", count == 0 ? Colors.blue : Colors.red)
                 ],
               ),
             ]),
@@ -96,9 +97,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget blocks(String text, [Color? color]) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          tt = tt + text;
-        });
+        if (text == "C") {
+          setState(() {
+            calText = "";
+          });
+        } else {
+          setState(() {
+            calText = calText + text;
+          });
+        }
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 14, left: 8, right: 8),
