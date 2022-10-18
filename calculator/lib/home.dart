@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -8,30 +9,40 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String calText = "";
-  String dob = "";
-  int count = 0;
+  String expression = "";
+  String result = "0";
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(251, 253, 250, 250),
-        body: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+        body: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  child: Text(calText,
+                Padding(
+                  padding: const EdgeInsets.only(right: 20, top: 245),
+                  child: Text(expression,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 35,
+                        fontWeight: FontWeight.w400,
                       )),
                 ),
                 const SizedBox(
                   height: 30,
                 ),
+                // Padding(
+                //   padding: const EdgeInsets.only(right: 10, bottom: 20),
+                //   child: Text(expression,
+                //       style: const TextStyle(
+                //         color: Colors.black54,
+                //         fontSize: 30,
+                //         fontWeight: FontWeight.w300,
+                //       )),
+                // ),
               ],
             ),
           ),
@@ -84,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   blocks("%"),
                   blocks("0"),
                   blocks("."),
-                  blocks("=", count == 0 ? Colors.blue : Colors.red)
+                  blocks("=", Colors.blue)
                 ],
               ),
             ]),
@@ -99,11 +110,25 @@ class _MyHomePageState extends State<MyHomePage> {
       onTap: () {
         if (text == "C") {
           setState(() {
-            calText = "";
+            expression = "";
           });
+        } else if (text == "⌫") {
+          expression = expression.substring(0, text.length - 1);
+        } else if (text == "=") {
+          expression = expression;
+          expression = expression.replaceAll('×', '*');
+          expression = expression.replaceAll('÷', '/');
+          try {
+            Parser p = Parser();
+            Expression exp = p.parse(expression);
+            ContextModel cm = ContextModel();
+            text = ' = ${exp.evaluate(EvaluationType.REAL, cm)}';
+          } catch (e) {
+            text = "Error";
+          }
         } else {
           setState(() {
-            calText = calText + text;
+            expression = expression + text;
           });
         }
       },
@@ -119,9 +144,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(
                 text,
                 style: TextStyle(
-                    color: color ?? Colors.black,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
+                  color: color ?? Colors.black,
+                  fontSize: 30,
+                  // fontWeight: FontWeight.bold
+                ),
               ),
             )),
       ),
