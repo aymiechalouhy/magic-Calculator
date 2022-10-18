@@ -1,3 +1,5 @@
+// use result
+
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -36,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 // Padding(
                 //   padding: const EdgeInsets.only(right: 10, bottom: 20),
-                //   child: Text(expression,
+                //   child: Text(result,
                 //       style: const TextStyle(
                 //         color: Colors.black54,
                 //         fontSize: 30,
@@ -99,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ]),
-          )
+          ),
         ]),
       ),
     );
@@ -111,9 +113,14 @@ class _MyHomePageState extends State<MyHomePage> {
         if (text == "C") {
           setState(() {
             expression = "";
+            result = "0";
           });
         } else if (text == "⌫") {
-          expression = expression.substring(0, text.length - 1);
+          if (expression.isNotEmpty) {
+            setState(() {
+              expression = expression.substring(0, expression.length - 1);
+            });
+          }
         } else if (text == "=") {
           expression = expression;
           expression = expression.replaceAll('×', '*');
@@ -146,7 +153,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(
                   color: color ?? Colors.black,
                   fontSize: 30,
-                  // fontWeight: FontWeight.bold
                 ),
               ),
             )),
